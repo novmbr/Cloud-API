@@ -7,7 +7,7 @@ let userSchema = new mongoose.Schema(
     passphrase: { type: String, required: true },
     token: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true, strict: true }
 );
 
 let User = mongoose.model("User", userSchema);

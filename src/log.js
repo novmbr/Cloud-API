@@ -1,7 +1,7 @@
 const chalk = require("chalk");
 
 function info(x) {
-  console.log(chalk.blue("[ℹ]") + " " + x);
+  console.log(chalk.blue("[ℹ]") + " " + chalk.blue(x));
 }
 
 function danger(x) {
