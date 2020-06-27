@@ -76,7 +76,7 @@ router.post("/", (req, res) => {
     passphrase: sha256.x2(req.body.passphrase),
     token: randomString(
       32,
-      "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()[]"
+      "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     ),
   });
 
