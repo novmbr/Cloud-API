@@ -1,0 +1,35 @@
+{
+  "name": "cloud-api",
+  "version": "1.0.0",
+  "description": "The API and backend for November Cloud.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/novmbr/November-Cloud-API.git"
+  },
+  "keywords": [
+    "cloud",
+    "api",
+    "backend",
+    "november"
+  ],
+  "author": "November",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/novmbr/November-Cloud-API/issues"
+  },
+  "homepage": "https://github.com/novmbr/November-Cloud-API#readme",
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.20"
+  }
+}
