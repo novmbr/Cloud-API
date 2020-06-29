@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const log = require("../src/log");
 const fs = require("fs");
-const path = require("path");
 
 let User = require("../models/user.model");
 
@@ -15,15 +14,54 @@ function binaryAgent(str) {
   return binCode.join("");
 }
 
-router.post("/upload", (req, res) => {
-  if (req.query.token == null) {
+router.get("/", (req, res) => {
+  if (req.body.token == null) {
     return res.status(422).json("Invalid token");
   }
 
   let user_id;
 
-  log.info(`Upload coming for token ${req.query.token}`);
-  User.find({ token: req.query.token }, (err, users) => {
+  User.find({ token: req.body.token }, (err, users) => {
+    user_id = users[0].id;
+  }).then(() => {
+    let files = [];
+
+    fs.readdirSync(`/cloud/${user_id}/`).forEach((file) => {
+      files.push({
+        name: file,
+        type: file.split(".").pop(),
+        size: fs.statSync(`/cloud/${user_id}/${file}`)["size"],
+        uploaded_at: fs.statSync(`/cloud/${user_id}/${file}`)["birthtime"],
+      });
+    });
+
+    res.json(files);
+  });
+});
+
+router.delete("/", (req, res) => {
+  if (req.body.token == null) {
+    return res.status(422).json("Invalid token");
+  }
+
+  User.find({ token: req.body.token }, (err, users) => {
+    user_id = users[0].id;
+  }).then(() => {
+    fs.unlinkSync(`/cloud/${user_id}/${req.body.fileName}`);
+
+    res.sendStatus(200);
+  });
+});
+
+router.post("/", (req, res) => {
+  if (req.body.token == null) {
+    return res.status(422).json("Invalid token");
+  }
+
+  let user_id;
+
+  log.info(`Upload coming for token ${req.body.token}`);
+  User.find({ token: req.body.token }, (err, users) => {
     user_id = users[0].id;
   }).then(() => {
     if (!fs.existsSync(`/cloud/${user_id}/`)) {
@@ -31,22 +69,13 @@ router.post("/upload", (req, res) => {
       log.info(`Created storage directory for user ${user_id}`);
     }
 
-    rawBody = "";
-    req.setEncoding("utf8");
+    log.info("Saving file: " + `/cloud/${user_id}/${req.body.fileName}`);
+    fs.writeFileSync(
+      `/cloud/${user_id}/${req.body.fileName}`,
+      req.body.content
+    );
+    log.info("File saved: " + `/cloud/${user_id}/${req.body.fileName}`);
 
-    req.on("data", function (chunk) {
-      rawBody += chunk;
-      log.info("New chunk incoming...");
-    });
-
-    req.on("end", () => {
-      log.info("Saving file: " + `/cloud/${user_id}/${req.query.fileName}`);
-      fs.writeFileSync(
-        `/cloud/${user_id}/${req.query.fileName}`,
-        binaryAgent(rawBody)
-      );
-      log.info("File saved: " + `/cloud/${user_id}/${req.query.fileName}`);
-    });
     res.sendStatus(200);
   });
 });
