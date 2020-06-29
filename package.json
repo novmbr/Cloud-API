@@ -11,6 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/novmbr/November-Cloud-API.git"
   },
+  "launchnow": {
+    "script": "npm start",
+    "github_repo": "novmbr:Cloud-API"
+  },
   "keywords": [
     "cloud",
     "api",
