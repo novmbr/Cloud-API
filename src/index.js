@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const fs = require("fs");
+const vars = require("../vars.json");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
@@ -13,10 +14,10 @@ const userRoute = require("../routes/user.route");
 const filesRoute = require("../routes/files.route");
 
 let app = express();
-const PORT = process.env.AUTH_PORT || 8081;
+const PORT = process.env.PORT || 8081;
 
 mongoose
-  .connect(process.env.MONGO_URI, {
+  .connect(vars.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -28,7 +29,7 @@ mongoose
   });
 let connection = mongoose.connection;
 
-// app.use(cors);
+app.use(cors);
 app.use(bodyParser.json({ limit: "100gb" }));
 
 app.get("/", (req, res) => {
