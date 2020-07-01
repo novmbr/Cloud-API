@@ -13,7 +13,7 @@ const userRoute = require("../routes/user.route");
 const filesRoute = require("../routes/files.route");
 
 let app = express();
-const PORT = process.env.AUTH_PORT || 5000;
+const PORT = process.env.AUTH_PORT || 8081;
 
 mongoose
   .connect(process.env.MONGO_URI, {
